@@ -20,6 +20,7 @@ import java.util.Scanner;
 import org.json.*;
 
 public class MainActivity extends AppCompatActivity {
+    String response = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +30,39 @@ public class MainActivity extends AppCompatActivity {
         Button btn = (Button) findViewById(R.id.button);
         EditText username = (EditText) findViewById(R.id.username);
         TextView error = (TextView) findViewById(R.id.data);
-        String response = "";
+
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                error.setText(username.getText());
+                response = "";
+                System.out.println("Clicked");
+//                if(username.getText() != null) {
+                Thread thread = new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL("https://api.github.com/users/" + username.getText().toString());
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+
+                            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                            String line;
+                            while ((line = in.readLine()) != null)
+                                response += line;
+                            JSONObject obj = new JSONObject(response);
+                            String followers = obj.getString("followers");
+                            error.setText("Followers: " + followers);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                thread.start();
+
+
+//                }
             }
         });
 
@@ -44,28 +72,5 @@ public class MainActivity extends AppCompatActivity {
 
 //    public void get_details(View view) {
 //        error.setText(username.getText());
-//        if(username.getText() != null) {
-//            try {
-//                URL url = new URL("https://api.github.com/users/" + username.getText().toString());
-//                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//                conn.setRequestMethod("GET");
-//                if(conn.getResponseCode() != 200) {
-//                    error.setText("Cannot connect to Github server");
-//                }
-//                else {
-//                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                    String line;
-//                    while((line = in.readLine()) != null)
-//                        response += line;
-//                    error.setText(response);
-//                    JSONObject obj = new JSONObject(response);
-//                    String followers = obj.getString("followers");
-//                    error.setText(followers);
-//                }
-//            }
-//            catch (IOException e) {
-//                System.out.println("Error");
-//            }
 
-//        }
 }
