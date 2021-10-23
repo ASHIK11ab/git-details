@@ -148,21 +148,6 @@
             android:textColor="#000"
             android:textSize="16sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Repositories:"
-            android:textColor="#000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/repos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:textSize="16sp" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
